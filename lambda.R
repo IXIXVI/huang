@@ -2,7 +2,7 @@ lamoptimal<-function(x,y,n,varth,gam,al,ph,alphatrue)
 {
 	lamU=0.1
 	lamL=1
-	lams=seq(lamL,lamU,length=50)
+	lams=seq(lamL,lamU,length=20)
 	ss=length(lams)
 	BIC1=seq(-1,-1,length=ss)
 	BIC2=seq(-1,-1,length=ss)

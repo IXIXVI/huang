@@ -54,13 +54,14 @@ for(i in 1:nsim){
   z2=as.numeric(u>(1/2))
   z=cbind(z1,z2)
   
+  #Example3
   #mu=2
   #z=matrix(1,nrow=n,ncol=1)
   
   alphatrue=c(-alp,alp)
   #alphatrue=mu
   K=length(alphatrue)
-  #mu=2
+
   
   y=mu+x%*%beta+e
   
@@ -73,15 +74,19 @@ for(i in 1:nsim){
   #MSEmu[i]=sqrt(t(muhat-mu)%*%(muhat-mu)/n)
   #MSEbeta[i]=sqrt(t(betahat-beta)%*%(betahat-beta)/ncol(x))
   
-  al=3 #2 MCP 1 LASSO 3 SCAD 4 truncated L1
+  al=4 # 1 LASSO  2 MCP  3 SCAD 4 truncated L1
   varth=1
   gam=3
   ph=1
   tau=0.5 # truncated parameter for truncated L1
   
+
   lamopt=lamoptimal(x,y,n,varth,gam,al,ph,alphatrue)
   lam=lamopt[[1]]
   lamall[i]=lam
+  
+  
+  #开始估计参数
   result=estimation(x,y,n,lam,varth,gam,al,ph,alphatrue)
   muhat=result[[2]]
   betahat=result[[3]]
@@ -125,5 +130,7 @@ for(i in 1:nsim){
   sign=sigor*sqrt(diag(deINV))
   alphasigor[i,1:K]=sign[1:K]
   betasigor[i,]=sign[(K+1):length(sign)]
+  
+  #i为迭代次数
   print(i)
 }

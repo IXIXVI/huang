@@ -58,15 +58,22 @@ eta=abs(del)-lam1
 eta=eta*(eta>0)
 eta=sign(del)*eta
 
+#al==1 LASSO
 if(al==1){
 lamL=lam1*weight
 etaL=abs(del)-lamL
 etaL=etaL*(etaL>0)
 etanew=sign(del)*etaL
 #etanew=eta
-}else if(al==2){
+}
+
+#al==2 MCP
+else if(al==2){
 etanew=(eta/(1-(varthold*gam)^(-1)))*(abs(del)<=(gam*lam))+del*(abs(del)>(gam*lam)) 
-}else if(al==3){
+}
+
+#al==3 SCAD
+else if(al==3){
 eta1=eta*(abs(del)<=(lam+lam1))
 eta2=del*(abs(del)>(gam*lam))
 lam2=(lam/varthold)*(gam/(gam-1))
@@ -74,8 +81,11 @@ etat=abs(del)-lam2
 etat=etat*(etat>0)
 etat=sign(del)*etat 
 eta3=(etat/(1-((gam-1)*varthold)^(-1)))*(abs(del)<=(gam*lam))*(abs(del)>(lam+lam1))
-etanew=eta1+eta2+eta3  #SCAD
-}else{
+etanew=eta1+eta2+eta3  
+}
+
+#al==4 truncated L1
+else{
 etaL=abs(del)-lam1
 etaL=etaL*(etaL>0)
 dell=etaL*(del/abs(del))
@@ -138,6 +148,8 @@ for(ii in 1:length(alphatrue)){
 	com=com[sort.list(com[,1]), ]	
 	iz[ii]=com[1,2]
 }	
+  
+  
 iz <- unique(iz)#=======================
 alphaold1=alphaold[iz]
 alphaold2=alphaold[-iz]
@@ -148,6 +160,14 @@ zhat=cbind(zhat1,zhat2)
    }
 sig=sqrt(t(y-zhat%*%alphaold-x%*%betaold)%*%(y-zhat%*%alphaold-x%*%betaold)/(n-K-dx))
 
+
+#K为预测的组数
+#muold为预测各样本对应的mu
+#betaold为预测的beta
+#betaold为最终的ηij
+#alphaold为预测的K个mu
+#zhat为预测各样本对应的分组
+#sig为残差平方和
 
 return(list(K,muold,betaold,etaold,group,delta,alphaold,zhat, sig))
   }
