@@ -116,9 +116,13 @@ for(i in 1:nsim){
       pvaluesim[i,(j-1)]=2*(1-pnorm(zcrit))
     }
   }
-  MOD=lm(y~z+x-1)
+  
+  
+  #or表示正确的参数结果（为了验证估计的oracle性质）
+  MOD=lm(y~z+x-1)#-1表示没有截距项
   ORcoef=MOD$coef
   alphaor=ORcoef[1:ncol(z)]
+  #alphasimor储存每次结果
   alphasimor[i,]=alphaor
   muor=z%*%alphaor
   betaor=ORcoef[(ncol(z)+1):(ncol(z)+ncol(x))]
